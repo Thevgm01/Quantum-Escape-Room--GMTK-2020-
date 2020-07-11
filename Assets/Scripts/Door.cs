@@ -11,14 +11,22 @@ public class Door : Interactable
 
     Transform player;
 
+    public InventoryItem itemToUnlock;
+
     void Start()
     {
         startPos = transform.position;
+        if(itemToUnlock != null)
+        {
+            nameOnHover = "Requires \"" + itemToUnlock.nameOnHover + "\"";
+        }
     }
 
     override
-    public void Interact(GameObject interactor)
+    public void Interact(PlayerController interactor)
     {
+        if (itemToUnlock != null && interactor._inventory.GetHeldItem() != itemToUnlock)
+            return;
         player = interactor.transform;
         StartCoroutine("Open");
     }

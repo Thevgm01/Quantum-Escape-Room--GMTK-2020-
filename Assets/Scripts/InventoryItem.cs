@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class InventoryItem : Interactable
 {
+    public Texture invenctoryIcon;
+
     override
-    public void Interact(GameObject interactor)
+    public void Interact(PlayerController interactor)
     {
-        interactor.GetComponent<Inventory>().AddItem(gameObject);
+        interactor.GetComponent<Inventory>().AddItem(this);
     }
 }

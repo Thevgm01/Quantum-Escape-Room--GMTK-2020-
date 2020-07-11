@@ -6,7 +6,8 @@ using System;
 public class PlayerController : MonoBehaviour
 {
     CharacterController _controller;
-    Inventory _inventory;
+    [HideInInspector]
+    public Inventory _inventory;
 
     [SerializeField]
     [Range(1, 10)]
@@ -34,6 +35,8 @@ public class PlayerController : MonoBehaviour
 
     public Action<GameObject> click = delegate { };
     public UnityEngine.UI.RawImage openHandImage;
+    Texture openHand;
+    public UnityEngine.UI.Text hoverText;
 
     void Start()
     {
@@ -45,6 +48,8 @@ public class PlayerController : MonoBehaviour
 
         _mainCam = Camera.main;
         camPlanes = GeometryUtility.CalculateFrustumPlanes(_mainCam);
+
+        openHand = openHandImage.texture;
     }
 
     void Update()
@@ -57,8 +62,8 @@ public class PlayerController : MonoBehaviour
 
     void HandleMovement()
     {
-        Vector3 moveHorizontal = Input.GetAxis("Horizontal") * transform.right * movementSpeed;
-        Vector3 moveVertical = Input.GetAxis("Vertical") * transform.forward * movementSpeed;
+        Vector3 moveHorizontal = Input.GetAxis("Horizontal") * transform.right;
+        Vector3 moveVertical = Input.GetAxis("Vertical") * transform.forward;
 
         if (_controller.isGrounded)
         {
@@ -72,7 +77,9 @@ public class PlayerController : MonoBehaviour
             _yVelocity += Physics.gravity.y * Time.deltaTime;
         }
 
-        Vector3 move = moveHorizontal + moveVertical + new Vector3(0, _yVelocity, 0);
+        Vector3 lateralMove = moveHorizontal + moveVertical;
+        if (lateralMove.magnitude > 1) lateralMove.Normalize();
+        Vector3 move = lateralMove * movementSpeed + new Vector3(0, _yVelocity, 0);
         _controller.Move(move * Time.deltaTime);
 
         if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
@@ -88,7 +95,11 @@ public class PlayerController : MonoBehaviour
 
     void HandleInteraction()
     {
+        Texture selectedIcon = _inventory.GetHeldIcon();
+        openHandImage.texture = selectedIcon? selectedIcon : openHand;
+
         openHandImage.gameObject.SetActive(false);
+        hoverText.text = "";
 
         RaycastHit raycast;
         if (Physics.Raycast(_mainCam.transform.position, _mainCam.transform.forward, out raycast))
@@ -100,8 +111,9 @@ public class PlayerController : MonoBehaviour
                 if (i != null && i.canInteract)
                 {
                     openHandImage.gameObject.SetActive(true);
+                    hoverText.text = i.nameOnHover;
                     if (Input.GetMouseButtonDown(0) || Input.GetAxis("Interact") > 0)
-                        i.Interact(gameObject);
+                        i.Interact(this);
                 }
             }
         }

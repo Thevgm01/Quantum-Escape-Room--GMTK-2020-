@@ -1,42 +1,63 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
+    public GameObject initialSlot;
+
     GameObject[] slots;
+    RawImage[] icons;
+    Text[] names;
+    InventoryItem[] items;
+
     int numSlots = 10;
     float slotHeight = 50;
     float distanceBetweenSlots = 60; // Hard coded ༼ つ ◕_◕ ༽つ
-    public GameObject initialSlot;
-
-    int selectedSlot = 0;
-
     public AnimationCurve slotRise;
     float[] slotRiseValues;
 
+    int selectedSlot = 0;
+
     void Start()
     {
+        slots = new GameObject[numSlots];
+        icons = new RawImage[numSlots];
+        names = new Text[numSlots];
+        items = new InventoryItem[numSlots];
+
+        slots[0] = initialSlot;
         // Reference resolution is 800x600
         initialSlot.transform.position = new Vector3(400 - distanceBetweenSlots * numSlots / 2, slotHeight, 0);
 
-        slots = new GameObject[numSlots];
-        slots[0] = initialSlot;
-
         slotRiseValues = new float[numSlots];
 
-        for (int i = 1; i < numSlots; i++)
+        for (int i = 0; i < numSlots; i++)
         {
-            slots[i] = Instantiate(initialSlot, initialSlot.transform.parent);
-            slots[i].transform.position = initialSlot.transform.position + new Vector3(distanceBetweenSlots * i, 0, 0);
+            if (i > 0)
+            {
+                slots[i] = Instantiate(initialSlot, initialSlot.transform.parent);
+                slots[i].transform.position = initialSlot.transform.position + new Vector3(distanceBetweenSlots * i, 0, 0);
+            }
+            foreach(Transform child in slots[i].transform)
+            {
+                if (child.name == "Item") icons[i] = child.GetComponent<RawImage>();
+                else if (child.name == "Text") names[i] = child.GetComponent<Text>();
+                child.gameObject.SetActive(false);
+            }
         }
     }
 
-    public void AddItem(GameObject newItem)
+    public void AddItem(InventoryItem newItem)
     {
-        slots[selectedSlot].GetComponent<UnityEngine.UI.RawImage>().material = newItem.GetComponent<Material>();
-        //var obj = Instantiate(new GameObject(), slots[selectedSlot].transform);
-        //obj.AddComponent<Material>().SetTexture("tex", newItem.GetComponent<Material>().mainTexture);
+        icons[selectedSlot].gameObject.SetActive(true);
+        icons[selectedSlot].texture = newItem.invenctoryIcon;
+        names[selectedSlot].gameObject.SetActive(true);
+        names[selectedSlot].text = newItem.nameOnHover;
+
+        items[selectedSlot] = newItem;
+        items[selectedSlot].gameObject.SetActive(false);
     }
 
     public void HandleInventory()
@@ -66,11 +87,27 @@ public class Inventory : MonoBehaviour
         for (int i = 0; i < numSlots; i++)
         {
             if (i == selectedSlot && slotRiseValues[i] < slotRise.keys[slotRise.length - 1].time)
+            {
                 slotRiseValues[i] += Time.deltaTime;
+                names[i].gameObject.SetActive(true);
+            }
             else if (i != selectedSlot && slotRiseValues[i] > 0)
+            {
                 slotRiseValues[i] -= Time.deltaTime;
+                names[i].gameObject.SetActive(false);
+            }
 
             slots[i].transform.position = new Vector3(slots[i].transform.position.x, slotHeight + slotRise.Evaluate(slotRiseValues[i]), 0);
         }
+    }
+
+    public InventoryItem GetHeldItem()
+    {
+        return items[selectedSlot];
+    }
+
+    public Texture GetHeldIcon()
+    {
+        return icons[selectedSlot].texture;
     }
 }

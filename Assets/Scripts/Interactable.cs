@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Interactable : MonoBehaviour
 {
-    public abstract void Interact(GameObject interactor);
+    public abstract void Interact(PlayerController interactor);
     public bool canInteract;
+    public string nameOnHover;
 }
