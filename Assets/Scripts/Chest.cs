@@ -31,6 +31,7 @@ public class Chest : Interactable
     {
         if (itemToUnlock != null && player._inventory.GetHeldItem() != itemToUnlock)
             return;
+        player._inventory.TryDeleteHeldItem();
         Instantiate(containedItem, transform.position, containedItem.transform.rotation);
         Destroy(gameObject);
     }

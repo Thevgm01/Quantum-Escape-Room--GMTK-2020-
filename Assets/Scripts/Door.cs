@@ -16,24 +16,22 @@ public class Door : Interactable
     public InventoryItem itemToUnlock;
     public Interactable activationSwitch;
 
+    string startHoverText;
+
     void Start()
     {
+        startHoverText = nameOnHover;
         startPos = transform.position;
         player = FindObjectOfType<PlayerController>();
-        if(itemToUnlock != null)
-        {
-            nameOnHover = "Requires \"" + itemToUnlock.nameOnHover + "\"";
-        }
-        if(activationSwitch != null)
-        {
-            activationSwitch.activated += Interact;
-        }
     }
 
     override
     public void LookingAt()
     {
-
+        if (player._inventory.GetHeldItem() == itemToUnlock)
+            nameOnHover = startHoverText;
+        else
+            nameOnHover = "Requires \"" + itemToUnlock.nameOnHover + "\"";
     }
 
     override
@@ -41,6 +39,7 @@ public class Door : Interactable
     {
         if (itemToUnlock != null && player._inventory.GetHeldItem() != itemToUnlock)
             return;
+        player._inventory.TryDeleteHeldItem();
         StartCoroutine("Open");
     }
 
@@ -53,6 +52,7 @@ public class Door : Interactable
             transform.position = startPos + new Vector3(0, opening.Evaluate(openAmount), 0);
             yield return null;
         }
+        /*
         while (Vector3.Distance(transform.position, player.transform.position) <= distanceToPlayerStartClosing)
         {
             yield return new WaitForSeconds(0.3f);
@@ -67,5 +67,6 @@ public class Door : Interactable
         transform.position = startPos;
         canInteract = !locked;
         yield break;
+        */
     }
 }

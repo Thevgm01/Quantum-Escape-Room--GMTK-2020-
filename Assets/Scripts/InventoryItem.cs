@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class InventoryItem : Interactable
 {
-    public Texture invenctoryIcon;
+    public Texture inventoryIcon;
+    public bool disappearAfterUse;
 
     override
     public void LookingAt()
