@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     [Range(0.1f, 10.0f)]
-    float mouseSensetivity;
+    float mouseSensetivity = 5;
 
     [SerializeField]
     [Range(0f, 5f)]
@@ -48,9 +48,6 @@ public class PlayerController : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         _inventory = GetComponent<Inventory>();
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
         _xAngle = transform.rotation.eulerAngles.y;
 
         _mainCam = Camera.main;
@@ -63,13 +60,16 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (canMove || canLook)
+        if (!Pause.isPaused)
         {
-            HandleMovement();
-            HandleInteraction();
+            if (canMove || canLook)
+            {
+                HandleMovement();
+                HandleInteraction();
+            }
+            _inventory.HandleInventory();
+            camPlanes = GeometryUtility.CalculateFrustumPlanes(_mainCam);
         }
-        _inventory.HandleInventory();
-        camPlanes = GeometryUtility.CalculateFrustumPlanes(_mainCam);
     }
 
     void HandleMovement()
@@ -150,13 +150,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void ToggleMovement()
+    public void SetMovement(bool val)
     {
-        canMove = !canMove;
+        canMove = val;
     }
     
-    public void ToggleLook()
+    public void SetLook(bool val)
     {
-        canLook = !canLook;
+        canLook = val;
+        if (canLook) _inventory?.Show();
+        else _inventory?.Hide();
+    }
+
+    public void SetMouseSensetivity(float val)
+    {
+        mouseSensetivity = val;
+    }
+
+    public void SetVolume(float val)
+    {
+        AudioListener.volume = val;
     }
 }
