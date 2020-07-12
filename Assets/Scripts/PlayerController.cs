@@ -29,7 +29,8 @@ public class PlayerController : MonoBehaviour
 
     float _xAngle = 0;
     float _yAngle = 0;
-    bool focused = false;
+    bool canMove = true;
+    bool canLook = true;
 
     Camera _mainCam;
     public Plane[] camPlanes;
@@ -58,35 +59,41 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        HandleMovement();
-        HandleInteraction();
-        if(!focused) _inventory.HandleInventory();
+        if (canMove || canLook)
+        {
+            HandleMovement();
+            HandleInteraction();
+        }
+        _inventory.HandleInventory();
         camPlanes = GeometryUtility.CalculateFrustumPlanes(_mainCam);
     }
 
     void HandleMovement()
     {
-        Vector3 moveHorizontal = Input.GetAxis("Horizontal") * transform.right;
-        Vector3 moveVertical = Input.GetAxis("Vertical") * transform.forward;
-
-        if (_controller.isGrounded)
+        if (canMove)
         {
-            if (Input.GetAxis("Jump") > 0)
-                _yVelocity = Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y);
+            Vector3 moveHorizontal = Input.GetAxis("Horizontal") * transform.right;
+            Vector3 moveVertical = Input.GetAxis("Vertical") * transform.forward;
+
+            if (_controller.isGrounded)
+            {
+                if (Input.GetAxis("Jump") > 0)
+                    _yVelocity = Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y);
+                else
+                    _yVelocity = 0;
+            }
             else
-                _yVelocity = 0;
-        }
-        else
-        {
-            _yVelocity += Physics.gravity.y * Time.deltaTime;
+            {
+                _yVelocity += Physics.gravity.y * Time.deltaTime;
+            }
+
+            Vector3 lateralMove = moveHorizontal + moveVertical;
+            if (lateralMove.magnitude > 1) lateralMove.Normalize();
+            Vector3 move = lateralMove * movementSpeed + new Vector3(0, _yVelocity, 0);
+            _controller.Move(move * Time.deltaTime);
         }
 
-        Vector3 lateralMove = moveHorizontal + moveVertical;
-        if (lateralMove.magnitude > 1) lateralMove.Normalize();
-        Vector3 move = lateralMove * movementSpeed + new Vector3(0, _yVelocity, 0);
-        _controller.Move(move * Time.deltaTime);
-
-        if (!focused && (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0))
+        if (canLook && (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0))
         {
             _xAngle += Input.GetAxis("Mouse X") * mouseSensetivity;
             _yAngle += Input.GetAxis("Mouse Y") * mouseSensetivity;
@@ -129,8 +136,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void ToggleFocus()
+    public void ToggleMovement()
     {
-        focused = !focused;
+        canMove = !canMove;
+    }
+    
+    public void ToggleLook()
+    {
+        canLook = !canLook;
     }
 }

@@ -77,7 +77,7 @@ public class QuantumSwitcher : MonoBehaviour
             ActivateLocation(i);
             bool spotOccupied = false;
             foreach(QuantumSwitcher qs in allQuantumObjects)
-                if (qs != null && this != qs && colliderBounds.bounds.Intersects(qs.colliderBounds.bounds))
+                if (qs != null && this != qs && !colliderBounds.isTrigger && colliderBounds.bounds.Intersects(qs.colliderBounds.bounds))
                     spotOccupied = true;
             if (!spotOccupied && !GeometryUtility.TestPlanesAABB(player.camPlanes, colliderBounds.bounds))
                 candidates.Add(i);

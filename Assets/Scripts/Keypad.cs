@@ -39,7 +39,7 @@ public class Keypad : Interactable
     public void Interact()
     {
         playerStartPosition = player.transform.position;
-        player.ToggleFocus();
+        player.ToggleLook();
         canInteract = false;
         StartCoroutine("ApproachKeypad");
         StartCoroutine("AcceptInput");
@@ -66,7 +66,7 @@ public class Keypad : Interactable
             playerCam.transform.rotation = Quaternion.Slerp(playerCam.transform.parent.rotation, closeToKeypadCamera.rotation, cameraMove.Evaluate(moveTimer));
             yield return null;
         }
-        player.ToggleFocus();
+        player.ToggleLook();
         canInteract = true;
     }
 
@@ -92,7 +92,6 @@ public class Keypad : Interactable
             {
                 if (textEntry.text == correctCode)
                 {
-                    Debug.Log("hello");
                     activated?.Invoke();
                     break;
                 }

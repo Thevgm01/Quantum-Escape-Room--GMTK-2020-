@@ -55,7 +55,7 @@ MonoBehaviour:
   canInteract: 1
   nameOnHover: Yellow Keycard
   inventoryIcon: {fileID: 2800000, guid: 7dc2b76d3488aa247847f137728c7330, type: 3}
-  disappearAfterUse: 0
+  disappearAfterUse: 1
 --- !u!65 &5929088564080769332
 BoxCollider:
   m_ObjectHideFlags: 0

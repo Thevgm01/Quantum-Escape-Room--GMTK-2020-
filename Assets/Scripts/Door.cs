@@ -6,17 +6,17 @@ public class Door : Interactable
 {
     public bool locked;
 
-    Vector3 startPos;
+    protected Vector3 startPos;
     float openAmount = 0;
     public AnimationCurve opening;
     float distanceToPlayerStartClosing = 10;
 
-    PlayerController player;
+    protected PlayerController player;
 
     public InventoryItem itemToUnlock;
     public Interactable activationSwitch;
 
-    string startHoverText;
+    protected string startHoverText;
 
     void Start()
     {
@@ -61,7 +61,7 @@ public class Door : Interactable
         StartCoroutine("Open");
     }
 
-    IEnumerator Open()
+    protected IEnumerator Open()
     {
         canInteract = false;
         while (openAmount < opening.keys[opening.length - 1].time)
