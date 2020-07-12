@@ -12,7 +12,7 @@ public class Inventory : MonoBehaviour
     Text[] names;
     InventoryItem[] items;
 
-    int numSlots = 10;
+    int numSlots = 4;
     float slotHeight = 60;
     float distanceBetweenSlots = 70; // Hard coded ༼ つ ◕_◕ ༽つ
     public AnimationCurve slotRise;
@@ -49,49 +49,45 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void AddItem(InventoryItem newItem)
-    {
-        icons[selectedSlot].gameObject.SetActive(true);
-        icons[selectedSlot].texture = newItem.invenctoryIcon;
-        names[selectedSlot].gameObject.SetActive(true);
-        names[selectedSlot].text = newItem.nameOnHover;
-
-        items[selectedSlot] = newItem;
-        items[selectedSlot].gameObject.SetActive(false);
-    }
-
     public void HandleInventory()
     {
+        int startSlot = selectedSlot;
         if (Input.mouseScrollDelta.y > 0)
         {
-            selectedSlot++;
-            if (selectedSlot >= numSlots) selectedSlot = 0;
+            do
+            {
+                selectedSlot++;
+                if (selectedSlot >= numSlots) selectedSlot = 0;
+            } while (items[selectedSlot] == null && selectedSlot != startSlot);
         }
         else if(Input.mouseScrollDelta.y < 0)
         {
-            selectedSlot--;
-            if (selectedSlot < 0) selectedSlot = numSlots - 1;
+            do
+            {
+                selectedSlot--;
+                if (selectedSlot < 0) selectedSlot = numSlots - 1;
+            } while (items[selectedSlot] == null && selectedSlot != startSlot);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) selectedSlot = 0;
         else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) selectedSlot = 1;
         else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) selectedSlot = 2;
         else if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4)) selectedSlot = 3;
-        else if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5)) selectedSlot = 4;
-        else if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Keypad6)) selectedSlot = 5;
-        else if (Input.GetKeyDown(KeyCode.Alpha7) || Input.GetKeyDown(KeyCode.Keypad7)) selectedSlot = 6;
-        else if (Input.GetKeyDown(KeyCode.Alpha8) || Input.GetKeyDown(KeyCode.Keypad8)) selectedSlot = 7;
-        else if (Input.GetKeyDown(KeyCode.Alpha9) || Input.GetKeyDown(KeyCode.Keypad9)) selectedSlot = 8;
-        else if (Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0)) selectedSlot = 9;
+        //else if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5)) selectedSlot = 4;
+        //else if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Keypad6)) selectedSlot = 5;
+        //else if (Input.GetKeyDown(KeyCode.Alpha7) || Input.GetKeyDown(KeyCode.Keypad7)) selectedSlot = 6;
+        //else if (Input.GetKeyDown(KeyCode.Alpha8) || Input.GetKeyDown(KeyCode.Keypad8)) selectedSlot = 7;
+        //else if (Input.GetKeyDown(KeyCode.Alpha9) || Input.GetKeyDown(KeyCode.Keypad9)) selectedSlot = 8;
+        //else if (Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0)) selectedSlot = 9;
 
         for (int i = 0; i < numSlots; i++)
         {
-            if (i == selectedSlot && slotRiseValues[i] < slotRise.keys[slotRise.length - 1].time)
+            if (i == selectedSlot && items[i] != null && slotRiseValues[i] < slotRise.keys[slotRise.length - 1].time)
             {
                 slotRiseValues[i] += Time.deltaTime;
                 names[i].gameObject.SetActive(true);
             }
-            else if (i != selectedSlot && slotRiseValues[i] > 0)
+            else if ((i != selectedSlot || items[i] == null) && slotRiseValues[i] > 0)
             {
                 slotRiseValues[i] -= Time.deltaTime;
                 names[i].gameObject.SetActive(false);
@@ -109,5 +105,29 @@ public class Inventory : MonoBehaviour
     public Texture GetHeldIcon()
     {
         return icons[selectedSlot].texture;
+    }
+
+    public void AddItem(InventoryItem newItem)
+    {
+        for(selectedSlot = 0; selectedSlot < numSlots; selectedSlot++)
+            if (items[selectedSlot] == null) break;
+
+        icons[selectedSlot].gameObject.SetActive(true);
+        icons[selectedSlot].texture = newItem.inventoryIcon;
+        names[selectedSlot].gameObject.SetActive(true);
+        names[selectedSlot].text = newItem.nameOnHover;
+
+        items[selectedSlot] = newItem;
+        items[selectedSlot].gameObject.SetActive(false);
+    }
+
+    public void TryDeleteHeldItem()
+    {
+        if (items[selectedSlot].disappearAfterUse)
+        {
+            items[selectedSlot] = null;
+            icons[selectedSlot].gameObject.SetActive(false);
+            names[selectedSlot].text = "";
+        }
     }
 }
