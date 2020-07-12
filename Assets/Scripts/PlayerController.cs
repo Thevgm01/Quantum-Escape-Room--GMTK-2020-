@@ -47,6 +47,8 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
+        _xAngle = transform.rotation.eulerAngles.y;
+
         _mainCam = Camera.main;
         camPlanes = GeometryUtility.CalculateFrustumPlanes(_mainCam);
 
@@ -109,10 +111,16 @@ public class PlayerController : MonoBehaviour
             {
                 GameObject hit = raycast.collider.gameObject;
                 Interactable i = hit.GetComponent<Interactable>();
+                if (i == null)
+                {
+                    hit = hit.transform.parent.gameObject;
+                    i = hit.GetComponent<Interactable>();
+                }
                 if (i != null && i.canInteract)
                 {
                     openHandImage.gameObject.SetActive(true);
                     hoverText.text = i.nameOnHover;
+                    i.LookingAt();
                     if (Input.GetMouseButtonDown(0) || Input.GetAxis("Interact") > 0)
                         i.Interact();
                 }
