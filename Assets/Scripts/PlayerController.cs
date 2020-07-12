@@ -41,6 +41,8 @@ public class PlayerController : MonoBehaviour
     public Texture openHand;
     public UnityEngine.UI.Text hoverText;
 
+    AudioSource footsteps;
+
     void Start()
     {
         _controller = GetComponent<CharacterController>();
@@ -55,6 +57,8 @@ public class PlayerController : MonoBehaviour
         camPlanes = GeometryUtility.CalculateFrustumPlanes(_mainCam);
 
         openHand = openHandImage.texture;
+
+        footsteps = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -91,6 +95,16 @@ public class PlayerController : MonoBehaviour
             if (lateralMove.magnitude > 1) lateralMove.Normalize();
             Vector3 move = lateralMove * movementSpeed + new Vector3(0, _yVelocity, 0);
             _controller.Move(move * Time.deltaTime);
+
+            if (lateralMove != Vector3.zero && _controller.isGrounded)
+            {
+                if(!footsteps.isPlaying)
+                {
+                    footsteps.pitch = UnityEngine.Random.Range(0.8f, 1.2f) + 1f;
+                    footsteps.Play();
+                }
+            }
+            //else if (footsteps.isPlaying) footsteps.Stop();
         }
 
         if (canLook && (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0))

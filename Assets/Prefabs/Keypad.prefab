@@ -703,6 +703,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  buttonPress: {fileID: 8300000, guid: 6e1404d705f6f374b92944608dc3a709, type: 3}
+  correct: {fileID: 8300000, guid: ab0eb87c38c1c394ba9eca877a960257, type: 3}
+  incorrect: {fileID: 8300000, guid: 3528b32d7ea4fb644bb6bb668e0bd775, type: 3}
 --- !u!65 &3213996264436124381
 BoxCollider:
   m_ObjectHideFlags: 0

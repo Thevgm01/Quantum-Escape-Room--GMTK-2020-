@@ -12,6 +12,8 @@ public class FinalDoor : Door
     public float fadeTimeInSeconds;
     public UnityEngine.UI.RawImage fadeToBlack;
 
+    public AudioClip partialUnlockSound;
+
     void Start()
     {
         startHoverText = nameOnHover;
@@ -22,6 +24,9 @@ public class FinalDoor : Door
         {
             activationSwitch.activated += Interact;
         }
+
+        source = GetComponent<AudioSource>();
+        source.clip = openSound;
     }
 
     override
@@ -58,29 +63,40 @@ public class FinalDoor : Door
     public void Interact()
     {
         InventoryItem held = player._inventory.GetHeldItem();
-        if (held == null) return;
+        if (held == null)
+        {
+            source.clip = lockedSound;
+            source.Play();
+            return;
+        }
 
+        source.clip = partialUnlockSound;
         if(blueCard != null && held.name.Contains(blueCard.name))
         {
             blueCard = null;
             player._inventory.TryDeleteHeldItem();
             foreach (Transform child in transform) if (child.name == "Blue Light") Destroy(child.gameObject);
+            source.Play();
         }
         else if(redCard != null && held.name.Contains(redCard.name))
         {
             redCard = null;
             player._inventory.TryDeleteHeldItem();
             foreach (Transform child in transform) if (child.name == "Red Light") Destroy(child.gameObject);
+            source.Play();
         }
         else if(yellowCard != null && held.name.Contains(yellowCard.name))
         {
             yellowCard = null;
             player._inventory.TryDeleteHeldItem();
             foreach (Transform child in transform) if (child.name == "Yellow Light") Destroy(child.gameObject);
+            source.Play();
         }
 
         if (blueCard == null && redCard == null && yellowCard == null)
         {
+            source.clip = openSound;
+            source.Play();
             StartCoroutine("Open");
             StartCoroutine("FadeToBlack");
             player.ToggleMovement();

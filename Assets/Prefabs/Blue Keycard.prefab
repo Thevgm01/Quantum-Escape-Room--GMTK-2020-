@@ -56,6 +56,7 @@ MonoBehaviour:
   nameOnHover: Blue Keycard
   inventoryIcon: {fileID: 2800000, guid: 217fdbfbbdffe27428ceaa8c94d74faf, type: 3}
   disappearAfterUse: 1
+  sound: {fileID: 8300000, guid: 959f1cdc9df89d047852d76153c9f943, type: 3}
 --- !u!65 &5929088564080769332
 BoxCollider:
   m_ObjectHideFlags: 0

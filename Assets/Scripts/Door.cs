@@ -18,6 +18,10 @@ public class Door : Interactable
 
     protected string startHoverText;
 
+    protected AudioSource source;
+    public AudioClip openSound;
+    public AudioClip lockedSound;
+
     void Start()
     {
         startHoverText = nameOnHover;
@@ -28,6 +32,8 @@ public class Door : Interactable
         {
             activationSwitch.activated += Interact;
         }
+
+        source = GetComponent<AudioSource>();
     }
 
     override
@@ -55,9 +61,15 @@ public class Door : Interactable
         if (itemToUnlock != null)
         {
             if (player._inventory.GetHeldItem() != itemToUnlock)
+            {
+                source.clip = lockedSound;
+                source.Play();
                 return;
+            }
             else player._inventory.TryDeleteHeldItem();
         }
+        source.clip = openSound;
+        source.Play();
         StartCoroutine("Open");
     }
 
