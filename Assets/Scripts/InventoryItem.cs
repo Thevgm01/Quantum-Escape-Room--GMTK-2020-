@@ -7,8 +7,8 @@ public class InventoryItem : Interactable
     public Texture invenctoryIcon;
 
     override
-    public void Interact(PlayerController interactor)
+    public void Interact()
     {
-        interactor.GetComponent<Inventory>().AddItem(this);
+        FindObjectOfType<Inventory>().AddItem(this);
     }
 }

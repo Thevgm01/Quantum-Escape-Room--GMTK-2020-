@@ -4,30 +4,37 @@ using UnityEngine;
 
 public class Door : Interactable
 {
+    public bool locked;
+
     Vector3 startPos;
     float openAmount = 0;
     public AnimationCurve opening;
     float distanceToPlayerStartClosing = 10;
 
-    Transform player;
+    PlayerController player;
 
     public InventoryItem itemToUnlock;
+    public Interactable activationSwitch;
 
     void Start()
     {
         startPos = transform.position;
+        player = FindObjectOfType<PlayerController>();
         if(itemToUnlock != null)
         {
             nameOnHover = "Requires \"" + itemToUnlock.nameOnHover + "\"";
         }
+        if(activationSwitch != null)
+        {
+            activationSwitch.activated += Interact;
+        }
     }
 
     override
-    public void Interact(PlayerController interactor)
+    public void Interact()
     {
-        if (itemToUnlock != null && interactor._inventory.GetHeldItem() != itemToUnlock)
+        if (itemToUnlock != null && player._inventory.GetHeldItem() != itemToUnlock)
             return;
-        player = interactor.transform;
         StartCoroutine("Open");
     }
 
@@ -52,7 +59,7 @@ public class Door : Interactable
         }
         openAmount = 0;
         transform.position = startPos;
-        canInteract = true;
+        canInteract = !locked;
         yield break;
     }
 }

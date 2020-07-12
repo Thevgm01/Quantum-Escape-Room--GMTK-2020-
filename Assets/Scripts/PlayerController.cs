@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour
                     openHandImage.gameObject.SetActive(true);
                     hoverText.text = i.nameOnHover;
                     if (Input.GetMouseButtonDown(0) || Input.GetAxis("Interact") > 0)
-                        i.Interact(this);
+                        i.Interact();
                 }
             }
         }
