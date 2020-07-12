@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
 
     float _xAngle = 0;
     float _yAngle = 0;
+    bool focused = false;
 
     Camera _mainCam;
     public Plane[] camPlanes;
@@ -56,7 +57,7 @@ public class PlayerController : MonoBehaviour
     {
         HandleMovement();
         HandleInteraction();
-        _inventory.HandleInventory();
+        if(!focused) _inventory.HandleInventory();
         camPlanes = GeometryUtility.CalculateFrustumPlanes(_mainCam);
     }
 
@@ -82,14 +83,14 @@ public class PlayerController : MonoBehaviour
         Vector3 move = lateralMove * movementSpeed + new Vector3(0, _yVelocity, 0);
         _controller.Move(move * Time.deltaTime);
 
-        if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
+        if (!focused && (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0))
         {
             _xAngle += Input.GetAxis("Mouse X") * mouseSensetivity;
             _yAngle += Input.GetAxis("Mouse Y") * mouseSensetivity;
             _yAngle = Mathf.Clamp(_yAngle, -90, 90);
 
             transform.localRotation = Quaternion.Euler(0, _xAngle, 0);
-            _mainCam.transform.localRotation = Quaternion.Euler(-_yAngle, 0, 0);
+            _mainCam.transform.parent.localRotation = Quaternion.Euler(-_yAngle, 0, 0);
         }
     }
 
@@ -117,5 +118,10 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void ToggleFocus()
+    {
+        focused = !focused;
     }
 }
