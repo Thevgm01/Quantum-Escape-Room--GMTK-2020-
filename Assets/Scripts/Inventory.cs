@@ -20,6 +20,8 @@ public class Inventory : MonoBehaviour
 
     int selectedSlot = 0;
 
+    public AudioSource pickUpSound;
+
     void Start()
     {
         slots = new GameObject[numSlots];
@@ -120,6 +122,9 @@ public class Inventory : MonoBehaviour
 
         items[selectedSlot] = newItem;
         items[selectedSlot].gameObject.SetActive(false);
+
+        pickUpSound.clip = newItem.sound;
+        pickUpSound.Play();
     }
 
     public void TryDeleteHeldItem()

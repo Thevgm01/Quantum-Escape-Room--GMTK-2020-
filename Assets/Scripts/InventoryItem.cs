@@ -6,6 +6,7 @@ public class InventoryItem : Interactable
 {
     public Texture inventoryIcon;
     public bool disappearAfterUse;
+    public AudioClip sound;
 
     PlayerController player;
 

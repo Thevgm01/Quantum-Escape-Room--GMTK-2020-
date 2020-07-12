@@ -11,6 +11,8 @@ public class Chest : Interactable
 
     string startHoverText;
 
+    public AudioSource unlockSound;
+
     void Start()
     {
         startHoverText = nameOnHover;
@@ -43,6 +45,7 @@ public class Chest : Interactable
             return;
         player._inventory.TryDeleteHeldItem();
         Instantiate(containedItem, transform.position, containedItem.transform.rotation);
+        unlockSound.Play();
         Destroy(gameObject);
     }
 }

@@ -76,6 +76,7 @@ MonoBehaviour:
   nameOnHover: Key
   inventoryIcon: {fileID: 2800000, guid: fd563d7ab993de444abee90e455afa0c, type: 3}
   disappearAfterUse: 1
+  sound: {fileID: 8300000, guid: 6d2f4687ee65cfb489f21e423ddfc48c, type: 3}
 --- !u!1 &188509383417279334
 GameObject:
   m_ObjectHideFlags: 0
