@@ -73,16 +73,16 @@ public class Inventory : MonoBehaviour
             if (selectedSlot < 0) selectedSlot = numSlots - 1;
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha1)) selectedSlot = 0;
-        else if (Input.GetKeyDown(KeyCode.Alpha2)) selectedSlot = 1;
-        else if (Input.GetKeyDown(KeyCode.Alpha3)) selectedSlot = 2;
-        else if (Input.GetKeyDown(KeyCode.Alpha4)) selectedSlot = 3;
-        else if (Input.GetKeyDown(KeyCode.Alpha5)) selectedSlot = 4;
-        else if (Input.GetKeyDown(KeyCode.Alpha6)) selectedSlot = 5;
-        else if (Input.GetKeyDown(KeyCode.Alpha7)) selectedSlot = 6;
-        else if (Input.GetKeyDown(KeyCode.Alpha8)) selectedSlot = 7;
-        else if (Input.GetKeyDown(KeyCode.Alpha9)) selectedSlot = 8;
-        else if (Input.GetKeyDown(KeyCode.Alpha0)) selectedSlot = 9;
+        if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) selectedSlot = 0;
+        else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) selectedSlot = 1;
+        else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) selectedSlot = 2;
+        else if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4)) selectedSlot = 3;
+        else if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5)) selectedSlot = 4;
+        else if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Keypad6)) selectedSlot = 5;
+        else if (Input.GetKeyDown(KeyCode.Alpha7) || Input.GetKeyDown(KeyCode.Keypad7)) selectedSlot = 6;
+        else if (Input.GetKeyDown(KeyCode.Alpha8) || Input.GetKeyDown(KeyCode.Keypad8)) selectedSlot = 7;
+        else if (Input.GetKeyDown(KeyCode.Alpha9) || Input.GetKeyDown(KeyCode.Keypad9)) selectedSlot = 8;
+        else if (Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0)) selectedSlot = 9;
 
         for (int i = 0; i < numSlots; i++)
         {
