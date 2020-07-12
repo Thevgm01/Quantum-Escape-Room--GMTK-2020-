@@ -7,10 +7,17 @@ public class InventoryItem : Interactable
     public Texture inventoryIcon;
     public bool disappearAfterUse;
 
+    PlayerController player;
+
+    void Start()
+    {
+        player = FindObjectOfType<PlayerController>();
+    }
+
     override
     public void LookingAt()
     {
-
+        player.openHandImage.texture = player.openHand;
     }
 
     override

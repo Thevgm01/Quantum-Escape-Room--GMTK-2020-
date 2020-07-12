@@ -5,9 +5,6 @@ using System;
 
 public class Keypad : Interactable
 {
-    Action codeSuccess = delegate { };
-    Action codeFailure = delegate { };
-
     public string correctCode;
 
     Camera playerCam;
@@ -77,7 +74,7 @@ public class Keypad : Interactable
     {
         while(!canInteract)
         {
-            if (textEntry.text.Length < 6)
+            if (textEntry.text.Length < 4)
             {
                 if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) textEntry.text += "1";
                 else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) textEntry.text += "2";
@@ -91,13 +88,12 @@ public class Keypad : Interactable
                 else if (Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0)) textEntry.text += "0";
             }
             if (Input.GetKeyDown(KeyCode.Backspace)) textEntry.text = textEntry.text.Substring(0, textEntry.text.Length - 1);
-            if (Input.GetMouseButtonDown(0) || Input.GetAxis("Interact") > 0)
+            if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Return))
             {
-                Debug.Log(textEntry.text);
-                Debug.Log(correctCode);
                 if (textEntry.text == correctCode)
                 {
-                    codeSuccess?.Invoke();
+                    Debug.Log("hello");
+                    activated?.Invoke();
                     break;
                 }
             }

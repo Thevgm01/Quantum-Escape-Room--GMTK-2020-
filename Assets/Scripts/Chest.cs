@@ -20,10 +20,20 @@ public class Chest : Interactable
     override
     public void LookingAt()
     {
-        if(player._inventory.GetHeldItem() == itemToUnlock)
-            nameOnHover = startHoverText;
+        if (itemToUnlock != null)
+        {
+            if (player._inventory.GetHeldItem() == itemToUnlock)
+            {
+                nameOnHover = startHoverText;
+                player.openHandImage.texture = player._inventory.GetHeldIcon();
+            }
+            else
+                nameOnHover = "Requires \"" + itemToUnlock.nameOnHover + "\"";
+        }
         else
-            nameOnHover = "Requires \"" + itemToUnlock.nameOnHover + "\"";
+        {
+            player.openHandImage.texture = player.openHand;
+        }
     }
 
     override

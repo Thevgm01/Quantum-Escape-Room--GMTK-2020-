@@ -104,6 +104,7 @@ public class Inventory : MonoBehaviour
 
     public Texture GetHeldIcon()
     {
+        if (GetHeldItem() == null) return null;
         return icons[selectedSlot].texture;
     }
 
@@ -123,7 +124,7 @@ public class Inventory : MonoBehaviour
 
     public void TryDeleteHeldItem()
     {
-        if (items[selectedSlot].disappearAfterUse)
+        if (items[selectedSlot] != null && items[selectedSlot].disappearAfterUse)
         {
             items[selectedSlot] = null;
             icons[selectedSlot].gameObject.SetActive(false);

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5929088564080769332}
   - component: {fileID: 3636553644940696614}
   m_Layer: 0
-  m_Name: Blue Keycard
+  m_Name: Red Keycard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,8 +53,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canInteract: 1
-  nameOnHover: Blue Keycard
-  inventoryIcon: {fileID: 2800000, guid: 217fdbfbbdffe27428ceaa8c94d74faf, type: 3}
+  nameOnHover: Red Keycard
+  inventoryIcon: {fileID: 2800000, guid: d1845f0681675d949be3b69f180c0cfb, type: 3}
   disappearAfterUse: 0
 --- !u!65 &5929088564080769332
 BoxCollider:
@@ -134,7 +134,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4bc1748e175f5dc489a5a68b45364ef4, type: 2}
+  - {fileID: 2100000, guid: 0710a8742f5a90d48b0288adff5084b6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

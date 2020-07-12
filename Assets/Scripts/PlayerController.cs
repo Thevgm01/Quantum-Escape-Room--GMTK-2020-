@@ -36,7 +36,8 @@ public class PlayerController : MonoBehaviour
 
     public Action<GameObject> click = delegate { };
     public UnityEngine.UI.RawImage openHandImage;
-    Texture openHand;
+    [HideInInspector]
+    public Texture openHand;
     public UnityEngine.UI.Text hoverText;
 
     void Start()
@@ -99,7 +100,7 @@ public class PlayerController : MonoBehaviour
     void HandleInteraction()
     {
         Texture selectedIcon = _inventory.GetHeldIcon();
-        openHandImage.texture = selectedIcon? selectedIcon : openHand;
+        //openHandImage.texture = selectedIcon? selectedIcon : openHand;
 
         openHandImage.gameObject.SetActive(false);
         hoverText.text = "";
@@ -111,7 +112,7 @@ public class PlayerController : MonoBehaviour
             {
                 GameObject hit = raycast.collider.gameObject;
                 Interactable i = hit.GetComponent<Interactable>();
-                if (i == null)
+                if (i == null && hit.transform.parent != null)
                 {
                     hit = hit.transform.parent.gameObject;
                     i = hit.GetComponent<Interactable>();
@@ -121,7 +122,7 @@ public class PlayerController : MonoBehaviour
                     openHandImage.gameObject.SetActive(true);
                     hoverText.text = i.nameOnHover;
                     i.LookingAt();
-                    if (Input.GetMouseButtonDown(0) || Input.GetAxis("Interact") > 0)
+                    if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.E))
                         i.Interact();
                 }
             }

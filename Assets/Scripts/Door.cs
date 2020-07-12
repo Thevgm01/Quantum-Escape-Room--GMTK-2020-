@@ -23,23 +23,41 @@ public class Door : Interactable
         startHoverText = nameOnHover;
         startPos = transform.position;
         player = FindObjectOfType<PlayerController>();
+
+        if(activationSwitch != null)
+        {
+            activationSwitch.activated += Interact;
+        }
     }
 
     override
     public void LookingAt()
     {
-        if (player._inventory.GetHeldItem() == itemToUnlock)
-            nameOnHover = startHoverText;
+        if (itemToUnlock != null)
+        {
+            if (player._inventory.GetHeldItem() == itemToUnlock)
+            {
+                nameOnHover = startHoverText;
+                player.openHandImage.texture = player._inventory.GetHeldIcon();
+            }
+            else
+                nameOnHover = "Requires \"" + itemToUnlock.nameOnHover + "\"";
+        }
         else
-            nameOnHover = "Requires \"" + itemToUnlock.nameOnHover + "\"";
+        {
+            player.openHandImage.texture = player.openHand;
+        }
     }
 
     override
     public void Interact()
     {
-        if (itemToUnlock != null && player._inventory.GetHeldItem() != itemToUnlock)
-            return;
-        player._inventory.TryDeleteHeldItem();
+        if (itemToUnlock != null)
+        {
+            if (player._inventory.GetHeldItem() != itemToUnlock)
+                return;
+            else player._inventory.TryDeleteHeldItem();
+        }
         StartCoroutine("Open");
     }
 
