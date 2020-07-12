@@ -52,7 +52,7 @@ public class QuantumSwitcher : MonoBehaviour
         Physics.Raycast(mainCam.transform.position, colliderBounds.bounds.center - mainCam.transform.position, out var rayHit);
         bool directLOS = rayHit.collider == colliderBounds;
         //Debug.Log(rayHit.collider.name);
-        Debug.DrawRay(mainCam.transform.position, (colliderBounds.bounds.center - mainCam.transform.position).normalized * rayHit.distance, directLOS ? Color.green : Color.red);
+        //Debug.DrawRay(mainCam.transform.position, (colliderBounds.bounds.center - mainCam.transform.position).normalized * rayHit.distance, directLOS ? Color.green : Color.red);
         if(directLOS)
         {
             bool withinFrustum = GeometryUtility.TestPlanesAABB(player.camPlanes, colliderBounds.bounds);
