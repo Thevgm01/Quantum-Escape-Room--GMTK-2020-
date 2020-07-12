@@ -13,8 +13,8 @@ public class Inventory : MonoBehaviour
     InventoryItem[] items;
 
     int numSlots = 10;
-    float slotHeight = 50;
-    float distanceBetweenSlots = 60; // Hard coded ༼ つ ◕_◕ ༽つ
+    float slotHeight = 60;
+    float distanceBetweenSlots = 70; // Hard coded ༼ つ ◕_◕ ༽つ
     public AnimationCurve slotRise;
     float[] slotRiseValues;
 
@@ -29,7 +29,7 @@ public class Inventory : MonoBehaviour
 
         slots[0] = initialSlot;
         // Reference resolution is 800x600
-        initialSlot.transform.position = new Vector3(400 - distanceBetweenSlots * numSlots / 2, slotHeight, 0);
+        initialSlot.transform.position = new Vector3(initialSlot.transform.position.x - distanceBetweenSlots * (numSlots - 1) / 2, slotHeight, 0);
 
         slotRiseValues = new float[numSlots];
 
@@ -97,7 +97,7 @@ public class Inventory : MonoBehaviour
                 names[i].gameObject.SetActive(false);
             }
 
-            slots[i].transform.position = new Vector3(slots[i].transform.position.x, slotHeight + slotRise.Evaluate(slotRiseValues[i]), 0);
+            slots[i].transform.position = new Vector3(slots[i].transform.position.x, slotHeight + slotRise.Evaluate(slotRiseValues[i]) * Screen.height / 14f, 0);
         }
     }
 
