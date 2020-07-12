@@ -82,6 +82,10 @@ public class Door : Interactable
             transform.position = startPos + new Vector3(0, opening.Evaluate(openAmount), 0);
             yield return null;
         }
+        if (activationSwitch != null)
+        {
+            activationSwitch.activated -= Interact;
+        }
         /*
         while (Vector3.Distance(transform.position, player.transform.position) <= distanceToPlayerStartClosing)
         {

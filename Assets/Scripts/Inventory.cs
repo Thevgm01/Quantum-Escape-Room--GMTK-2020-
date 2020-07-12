@@ -136,4 +136,14 @@ public class Inventory : MonoBehaviour
             names[selectedSlot].text = "";
         }
     }
+
+    public void Show()
+    {
+        initialSlot.transform.parent.gameObject.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        initialSlot.transform.parent.gameObject.SetActive(false);
+    }
 }

@@ -8,9 +8,7 @@ public class FinalDoor : Door
     public InventoryItem redCard;
     public InventoryItem yellowCard;
 
-    float fadeTracker = 0;
-    public float fadeTimeInSeconds;
-    public UnityEngine.UI.RawImage fadeToBlack;
+    StoryShower story;
 
     public AudioClip partialUnlockSound;
 
@@ -24,6 +22,8 @@ public class FinalDoor : Door
         {
             activationSwitch.activated += Interact;
         }
+
+        story = FindObjectOfType<StoryShower>();
 
         source = GetComponent<AudioSource>();
         source.clip = openSound;
@@ -98,19 +98,9 @@ public class FinalDoor : Door
             source.clip = openSound;
             source.Play();
             StartCoroutine("Open");
-            StartCoroutine("FadeToBlack");
-            player.ToggleMovement();
-            player.ToggleLook();
-        }
-    }
-
-    IEnumerator FadeToBlack()
-    {
-        while(fadeTracker < fadeTimeInSeconds)
-        {
-            fadeTracker += Time.deltaTime;
-            fadeToBlack.color = new Color(0, 0, 0, fadeTracker / fadeTimeInSeconds);
-            yield return null;
+            story.Outro();
+            player.SetMovement(false);
+            player.SetLook(false);
         }
     }
 }
