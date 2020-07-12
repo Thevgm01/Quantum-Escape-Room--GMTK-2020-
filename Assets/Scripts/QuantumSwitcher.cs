@@ -8,9 +8,12 @@ public class QuantumSwitcher : MonoBehaviour
     List<Quaternion> rotations;
     int curLocation;
 
+    Camera mainCam;
     PlayerController player;
     Collider colliderBounds;
     bool firstSight;
+
+    public static QuantumSwitcher[] allQuantumObjects;
 
     void Start()
     {
@@ -34,8 +37,11 @@ public class QuantumSwitcher : MonoBehaviour
             }
         }
 
+        if (allQuantumObjects == null) allQuantumObjects = FindObjectsOfType<QuantumSwitcher>();
+
+        mainCam = Camera.main;
         player = FindObjectOfType<PlayerController>();
-        colliderBounds = GetComponent<Collider>();
+        colliderBounds = GetComponentInChildren<Collider>();
         ActivateLocation(0);
         curLocation = 0;
         firstSight = false;
@@ -43,15 +49,23 @@ public class QuantumSwitcher : MonoBehaviour
 
     void FixedUpdate()
     {
-        bool isVisible = GeometryUtility.TestPlanesAABB(player.camPlanes, colliderBounds.bounds);
-        if(isVisible)
+        Physics.Raycast(mainCam.transform.position, colliderBounds.bounds.center - mainCam.transform.position, out var rayHit);
+        bool directLOS = rayHit.collider == colliderBounds;
+        //Debug.Log(rayHit.collider.name);
+        Debug.DrawRay(mainCam.transform.position, (colliderBounds.bounds.center - mainCam.transform.position).normalized * rayHit.distance, directLOS ? Color.green : Color.red);
+        if(directLOS)
         {
-            firstSight = true;
+            bool withinFrustum = GeometryUtility.TestPlanesAABB(player.camPlanes, colliderBounds.bounds);
+            if (withinFrustum)
+            {
+                firstSight = true;
+            }
+            else if (firstSight)
+            {
+                SwitchToNewLocation();
+            }
         }
-        else if(firstSight)
-        {
-            SwitchToNewLocation();
-        }
+
     }
 
     void SwitchToNewLocation()
@@ -61,7 +75,11 @@ public class QuantumSwitcher : MonoBehaviour
         {
             if (i == curLocation) continue;
             ActivateLocation(i);
-            if (!GeometryUtility.TestPlanesAABB(player.camPlanes, colliderBounds.bounds))
+            bool spotOccupied = false;
+            foreach(QuantumSwitcher qs in allQuantumObjects)
+                if (this != qs && colliderBounds.bounds.Intersects(qs.colliderBounds.bounds))
+                    spotOccupied = true;
+            if (!spotOccupied && !GeometryUtility.TestPlanesAABB(player.camPlanes, colliderBounds.bounds))
                 candidates.Add(i);
         }
         if (candidates.Count > 0)

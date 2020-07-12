@@ -31,6 +31,12 @@ public class Door : Interactable
     }
 
     override
+    public void LookingAt()
+    {
+
+    }
+
+    override
     public void Interact()
     {
         if (itemToUnlock != null && player._inventory.GetHeldItem() != itemToUnlock)

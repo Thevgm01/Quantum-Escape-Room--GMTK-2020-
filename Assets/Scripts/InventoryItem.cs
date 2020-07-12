@@ -7,6 +7,12 @@ public class InventoryItem : Interactable
     public Texture invenctoryIcon;
 
     override
+    public void LookingAt()
+    {
+
+    }
+
+    override
     public void Interact()
     {
         FindObjectOfType<Inventory>().AddItem(this);
